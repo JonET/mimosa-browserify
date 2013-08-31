@@ -1,4 +1,3 @@
-Mimosa Browserify Module
-
+# Mimosa Browserify Module
 ## Info
-Experimental module to support commonjs in Mimosa via Browserify.
+Experimental module to support CommonJS in [Mimosa](https://github.com/dbashford/mimosa) via [Browserify](https://github.com/substack/node-browserify).
