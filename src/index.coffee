@@ -24,8 +24,12 @@ _browserify = (mimosaConfig, options, next) ->
   b = browserify()
   for entry in mimosaConfig.browserify.entries
     b.add path.join mimosaConfig.root, entry
-  b.bundle(browerifyOptions).pipe(fs.createWriteStream(bundlePath))
 
+  bundle = b.bundle browerifyOptions, (err, src) ->
+    if err
+      logger.error "Browserify - #{err}"
+
+  bundle.pipe fs.createWriteStream bundlePath
   next()
 
 module.exports =
