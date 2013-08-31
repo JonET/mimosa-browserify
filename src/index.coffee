@@ -13,23 +13,31 @@ registration = (mimosaConfig, register) ->
 
 _browserify = (mimosaConfig, options, next) ->
   compiledJavascriptDir = mimosaConfig.watch.compiledJavascriptDir
-  outputFile = mimosaConfig.browserify.outputFile
-  bundlePath = path.join compiledJavascriptDir, outputFile
 
-  browerifyOptions =
-    debug: mimosaConfig.browserify.debug
+  logger.info 'Creating Browserify Bundle(s)'
 
-  logger.info 'Creating Browserify Bundle'
-  b = browserify()
-  for entry in mimosaConfig.browserify.entries
-    b.add path.join mimosaConfig.root, entry
+  for bundleConfig in mimosaConfig.browserify
+    outputFile = bundleConfig.outputFile
+    bundlePath = path.join compiledJavascriptDir, outputFile
 
-  bundle = b.bundle browerifyOptions, (err, src) ->
-    if err
-      logger.error "Browserify - #{err}"
+    browerifyOptions =
+      debug: bundleConfig.debug
 
-  bundle.pipe fs.createWriteStream bundlePath
+    b = browserify()
+    for entry in bundleConfig.entries
+      b.add path.join mimosaConfig.root, entry
+
+    bundle = b.bundle browerifyOptions, _bundleCallback(bundleConfig)
+    bundle.pipe fs.createWriteStream bundlePath
+
   next()
+
+_bundleCallback = (bundleConfig) ->
+  (err, src) ->
+    if err?
+      logger.error("Browserify [[#{bundleConfig.outputFile}]] - #{err}")
+    else if src?
+      logger.success("Browserify - Created bundle [[ #{bundleConfig.outputFile} ]]")
 
 module.exports =
   registration:    registration

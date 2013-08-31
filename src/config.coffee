@@ -1,19 +1,19 @@
 "use strict"
 
 exports.defaults = ->
-  browserify:
+  browserify: [{
     entries: ['public/javascripts/main.js']
     outputFile: 'bundle.js'
-    debug: true
+    debug: true }]
 
 exports.placeholder = ->
   """
   \t
 
-    #browserify:
+    #browserify: [{                             # NOTE that browserify takes an array. You can configure multiple bundles if you wish.
       #entries: ['public/javascripts/main.js']  # application entry points
       #outputFile: 'bundle.js'                  # the bundled output file
-      #debug: true                              # 'true' to generate source maps in the bundled output
+      #debug: true }]                           # 'true' to generate source maps in the bundled output
 
   """
 
