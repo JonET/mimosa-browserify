@@ -1,11 +1,10 @@
 "use strict"
 
-logger = require 'logmimosa'
-config = require './config'
-browserify = require 'browserify'
-fs = require 'fs'
-path = require 'path'
-_ = require 'lodash'
+browserify  = require 'browserify'
+fs          = require 'fs'
+logger      = require 'logmimosa'
+path        = require 'path'
+config      = require './config'
 
 registration = (mimosaConfig, register) ->
   e = mimosaConfig.extensions
