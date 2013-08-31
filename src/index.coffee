@@ -35,7 +35,7 @@ _browserify = (mimosaConfig, options, next) ->
 _bundleCallback = (bundleConfig) ->
   (err, src) ->
     if err?
-      logger.error("Browserify [[#{bundleConfig.outputFile}]] - #{err}")
+      logger.error("Browserify [[ #{bundleConfig.outputFile} ]] - #{err}")
     else if src?
       logger.success("Browserify - Created bundle [[ #{bundleConfig.outputFile} ]]")
 
