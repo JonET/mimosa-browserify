@@ -1,0 +1,36 @@
+{
+  "name": "mimosa-browserify",
+  "version": "0.0.1",
+  "homepage": "https://github.com/JonET",
+  "author": "Jonathan Taylor",
+  "description": "Browserify support for Mimosa",
+  "contributors": [
+    {
+      "name": "Jonathan Taylor",
+      "email": "jon@jetyalor.net"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "YOUR REPO URL"
+  },
+  "keywords": [
+    "mimosa",
+    "mmodule",
+    "browserify",
+    "commonjs"
+  ],
+  "dependencies": {
+    "logmimosa": "0.5.0",
+    "browserify": "2.29.0",
+    "lodash": "1.3.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "main": "./lib/index",
+  "scripts": {
+    "prepublish": "mimosa build"
+  }
+}
