@@ -1,10 +1,12 @@
 "use strict"
 
 exports.defaults = ->
-  browserify: [{
-    entries: ['public/javascripts/main.js']
-    outputFile: 'bundle.js'
-    debug: true }]
+  browserify:
+    bundles: [
+      entries: ['public/javascripts/main.js']
+      outputFile: 'bundle.js' ]
+    debug: true
+    shims: []
 
 exports.placeholder = ->
   """
