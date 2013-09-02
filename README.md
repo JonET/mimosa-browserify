@@ -19,12 +19,19 @@ exports.config =
     shims:
       templates:
         path: 'javascripts/templates'
-        exports: null
+        exports: 'dust'
+        depends:
+          dust: 'dust'
       jquery:
         path: 'javascripts/vendor/jquery/jquery'
         exports: '$'
+    aliases:
+      dust: 'javascripts/vendor/dust'
+      templates: 'javascripts/templates'
 ```
 Note the use of shims to wrap non-CommonJS code. The documentation for the shim configuration can be found at [browserify-shim](https://github.com/thlorenz/browserify-shim).
+
+Aliases allow you to name your modules. This frees you from having to use relative paths. So in this example you could `require('dust')` instead of `require('./vendor/dust')`. Aliases also make it nice when defining dependencies in your shims.  Here we alias `dust` and then declare that templates has a dependency on it. We also re-export the `dust` object to emulate the behavior of mimosa's AMD wrapped template. 
 ## quickstart
 There is an example project available [here](https://github.com/JonET/mimosa-browserify-example) to help you get started.
 ## templates
