@@ -16,6 +16,7 @@ registration = (mimosaConfig, register) ->
   for name, cfg of mimosaConfig.browserify.shims
     cfg.path = path.join mimosaConfig.watch.compiledDir, cfg.path
 
+
 _browserify = (mimosaConfig, options, next) ->
   root = mimosaConfig.watch.compiledDir
   browserifyConfig = mimosaConfig.browserify
@@ -31,18 +32,37 @@ _browserify = (mimosaConfig, options, next) ->
     browerifyOptions =
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
 
-    shimOptions =
-      if bundleConfig.shims?
-        _.pick browserifyConfig.shims, bundleConfig.shims
-      else
-        browserifyConfig.shims
+    b = browserify()
+    _makeAliases b, mimosaConfig
+    _makeShims b, mimosaConfig, browserifyConfig.bundles
 
-    b = shim browserify(), shimOptions
     for entry in bundleConfig.entries
       b.add path.join root, entry
 
     bundleCallback = _bundleCallback bundleConfig, bundlePath, nextIfDone
     bundle         = b.bundle browerifyOptions, bundleCallback
+
+
+_makeAliases = (browserifyInstance, mimosaConfig) ->
+  b = browserifyInstance
+  aliases = mimosaConfig.browserify.aliases
+  root = mimosaConfig.watch.compiledDir
+  if not aliases? then return
+
+  for k,v of aliases
+    b.require path.join(root, v), expose: k
+
+
+_makeShims = (browserifyInstance, mimosaConfig, bundleConfig) ->
+  b = browserifyInstance
+  shims =
+    if bundleConfig.shims?
+      _.pick mimosaConfig.browserify.shims, bundleConfig.shims
+    else
+      mimosaConfig.browserify.shims
+
+  shim b, shims
+
 
 _nextIfDone = (numBundles, next) ->
   bundlesComplete = 0
@@ -59,6 +79,7 @@ _bundleCallback = (bundleConfig, bundlePath, complete) ->
       fs.writeFileSync bundlePath, src
       logger.success "Browserify - Created bundle [[ #{bundleConfig.outputFile} ]]"
     complete()
+
 
 module.exports =
   registration:    registration
