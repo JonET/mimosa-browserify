@@ -3,20 +3,20 @@
 exports.defaults = ->
   browserify:
     bundles: [
-      entries: ['public/javascripts/main.js']
+      entries: ['javascripts/main.js']
       outputFile: 'bundle.js' ]
     debug: true
     shims: []
 
 exports.placeholder = ->
   """
-  \t
-
-    #browserify: [{                             # NOTE that browserify takes an array. You can configure multiple bundles if you wish.
-      #entries: ['public/javascripts/main.js']  # application entry points
-      #outputFile: 'bundle.js'                  # the bundled output file
-      #debug: true }]                           # 'true' to generate source maps in the bundled output
-
+    # browserify:
+    #   bundles: [                          # add one or more bundles with one or more entry points
+    #     entries: ['javascripts/main.js']
+    #     outputFile: 'bundle.js' ]
+    #   debug: true                         # true for sourcemaps
+    #   shims: []                           # add any number of shims you neeed
+                                            # see https://github.com/thlorenz/browserify-shim for config details
   """
 
 exports.validate = (config, validators) -> [] #tbd

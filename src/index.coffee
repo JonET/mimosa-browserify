@@ -14,10 +14,10 @@ registration = (mimosaConfig, register) ->
   register ['postBuild'], 'optimize', _browserify
 
   for name, cfg of mimosaConfig.browserify.shims
-    cfg.path = path.join mimosaConfig.root, cfg.path
+    cfg.path = path.join mimosaConfig.watch.compiledDir, cfg.path
 
 _browserify = (mimosaConfig, options, next) ->
-  compiledJavascriptDir = mimosaConfig.watch.compiledJavascriptDir
+  root = mimosaConfig.watch.compiledDir
   browserifyConfig = mimosaConfig.browserify
 
   plural = browserifyConfig.bundles.length > 1
@@ -26,7 +26,7 @@ _browserify = (mimosaConfig, options, next) ->
   nextIfDone = _nextIfDone browserifyConfig.bundles.length, next
   for bundleConfig in browserifyConfig.bundles
     outputFile = bundleConfig.outputFile
-    bundlePath = path.join compiledJavascriptDir, outputFile
+    bundlePath = path.join root, outputFile
 
     browerifyOptions =
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
@@ -39,7 +39,7 @@ _browserify = (mimosaConfig, options, next) ->
 
     b = shim browserify(), shimOptions
     for entry in bundleConfig.entries
-      b.add path.join mimosaConfig.root, entry
+      b.add path.join root, entry
 
     bundleCallback = _bundleCallback bundleConfig, bundlePath, nextIfDone
     bundle         = b.bundle browerifyOptions, bundleCallback
