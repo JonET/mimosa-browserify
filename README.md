@@ -1,11 +1,9 @@
 # mimosa-browserify
 [Mimosa](https://github.com/dbashford/mimosa) module to support CommonJS via [Browserify](https://github.com/substack/node-browserify). `require()` your web modules Node.js style!
 ## usage
-Replace `require` with `browserify` in your `mimosa-config.coffee`. For example:
-```coffee
-modules: ['lint', 'server', 'browserify', 'live-reload', 'bower']
-```
-Example configuration:
+Replace `require` with `browserify` in your `mimosa-config.coffee`. Mimosa will automatically install mimosa-browserify from NPM if you don't already have it.
+
+####Example configuration:
 ```coffee
 exports.config =
   modules: ["server","browserify","lint","live-reload","bower"]
