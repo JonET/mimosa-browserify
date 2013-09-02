@@ -25,5 +25,7 @@ exports.config =
         exports: '$'
 ```
 Note the use of shims to wrap non-CommonJS code. The documentation for the shim configuration can be found at [browserify-shim](https://github.com/thlorenz/browserify-shim).
+## quickstart
+There is an example project available [here](https://github.com/JonET/mimosa-browserify-example) to help you get started.
 ## templates
 Currently Mimosa only outputs bare or AMD wrapped templates. You will need to use bare templates and a shim until CommonJS templates are supported.
