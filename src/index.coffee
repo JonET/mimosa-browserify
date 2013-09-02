@@ -21,7 +21,7 @@ _browserify = (mimosaConfig, options, next) ->
   browserifyConfig = mimosaConfig.browserify
 
   plural = browserifyConfig.bundles.length > 1
-  logger.info "Browserify - Creating bundle#{if plural then 's' else ''} #{process.cwd()}"
+  logger.info "Browserify - Creating bundle#{if plural then 's' else ''}"
 
   for bundleConfig in browserifyConfig.bundles
     outputFile = bundleConfig.outputFile
@@ -29,7 +29,6 @@ _browserify = (mimosaConfig, options, next) ->
 
     browerifyOptions =
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
-      detectGlobals: false
 
     shimOptions =
       if bundleConfig.shims?
