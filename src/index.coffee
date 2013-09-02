@@ -26,7 +26,7 @@ _browserify = (mimosaConfig, options, next) ->
   nextIfDone = _nextIfDone browserifyConfig.bundles.length, next
   for bundleConfig in browserifyConfig.bundles
     outputFile = bundleConfig.outputFile
-    bundlePath = path.join root, outputFile
+    bundlePath = path.join mimosaConfig.watch.compiledJavascriptDir, outputFile
 
     browerifyOptions =
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
