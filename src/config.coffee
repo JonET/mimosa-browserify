@@ -23,4 +23,27 @@ exports.placeholder = ->
     #                                       # to worry about relative paths. define as many as you need!
   """
 
-exports.validate = (config, validators) -> [] #tbd
+exports.validate = (config, validators) ->
+  errors = []
+
+  if validators.ifExistsIsObject(errors, "browserify config", config.browserify)
+    validators.ifExistsIsBoolean(errors, "browserify.debug", config.browserify.debug)
+    validators.ifExistsIsArray(errors, "browserify.shims", config.browserify.shims)
+    validators.ifExistsIsObject(errors, "browserify.aliases", config.browserify.aliases)
+    if validators.isArray(errors, "browserify.bundles", config.browserify.bundles)
+      for bund in config.browserify.bundles
+        if validators.ifExistsIsObject(errors, "browserify.bundles entries", bund)
+          if bund.entries and Array.isArray(bund.entries)
+            if bund.entries.length is 0
+              errors.push "browserify.bundles.entries array cannot be empty."
+            else
+              validators.isArrayOfStrings(errors, "browserify.bundles.entries", bund.entries)
+          else
+            errors.push "Each browserify.bundles entry must contain an entries array"
+
+          if bund.outputFile
+            validators.isString(errors, "browserify.bundles.outputFile", bund.outputFile)
+          else
+            errors.push "Each browserify.bundles entry must contain an outputFile string"
+
+  errors
