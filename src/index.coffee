@@ -10,12 +10,22 @@ config      = require './config'
 
 registration = (mimosaConfig, register) ->
   e = mimosaConfig.extensions
+  register ['postClean'], 'init', _clean
   register ['add','update','remove'], 'afterWrite', _browserify, [e.javascript..., e.template...]
   register ['postBuild'], 'optimize', _browserify
 
   for name, cfg of mimosaConfig.browserify.shims
     cfg.path = path.join mimosaConfig.watch.compiledDir, cfg.path
 
+_clean = (mimosaConfig, options, next) ->
+  for bundleConfig in mimosaConfig.browserify.bundles
+    outputFile = bundleConfig.outputFile
+    bundlePath = path.join mimosaConfig.watch.compiledJavascriptDir, outputFile
+    if fs.existsSync bundlePath
+      fs.unlinkSync bundlePath
+      logger.success "Browserify - Removed bundle [[ #{outputFile} ]]"
+
+  next()
 
 _browserify = (mimosaConfig, options, next) ->
   root = mimosaConfig.watch.compiledDir
