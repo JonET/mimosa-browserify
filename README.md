@@ -40,3 +40,5 @@ Use noParse to let browserify know not to parse large vendor libraries with no n
 Mimosa as of v1.0.0-rc.4 can output CommonJS wrapped templates compatible with mimosa-browserify. Be sure to set `template.wrapType` to `common` and set your `commonLibPath` if you want to use compiled templates. (you probably do)
 ## quickstart
 There is an example project available [here](https://github.com/JonET/mimosa-browserify-example) to help you get started.
+
+Want to roll with mimosa-browserify and [Ember.js](http://emberjs.com/)? It's easy! [Check it out](https://github.com/JonET/mimosa-ember-commonjs).
