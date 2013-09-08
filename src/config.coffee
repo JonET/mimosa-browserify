@@ -25,7 +25,7 @@ exports.placeholder = ->
     #
     #   noParse:                            # an array of files you want browserify to skip parsing for.
     #     ['javascripts/vendor/jquery']     # useful for the big libs (jquery, ember, handlebars, dust, etc) that don't
-    #                                       # need node environment vars (__process, module, etc). This can save
+    #                                       # need node environment vars (__process, global, etc). This can save
     #                                       # a significant amount of time when bundling.
   """
 
