@@ -1,11 +1,14 @@
 "use strict"
 
+fs          = require 'fs'
+path        = require 'path'
+
 _           = require 'lodash'
 browserify  = require 'browserify'
-fs          = require 'fs'
 logger      = require 'logmimosa'
-path        = require 'path'
 shim        = require 'browserify-shim'
+wrench      = require 'wrench'
+
 config      = require './config'
 
 registration = (mimosaConfig, register) ->
@@ -34,7 +37,8 @@ _browserify = (mimosaConfig, options, next) ->
   plural = browserifyConfig.bundles.length > 1
   logger.info "Browserify - Creating bundle#{if plural then 's' else ''}"
 
-  nextIfDone = _nextIfDone browserifyConfig.bundles.length, next
+  bundledFiles = []
+  whenDone = _whenDone mimosaConfig, bundledFiles, next
   for bundleConfig in browserifyConfig.bundles
     outputFile = bundleConfig.outputFile
     bundlePath = path.join mimosaConfig.watch.compiledJavascriptDir, outputFile
@@ -43,13 +47,15 @@ _browserify = (mimosaConfig, options, next) ->
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
 
     b = browserify()
+    b.on 'file', (fileName) -> bundledFiles.push fileName
+
     _makeAliases b, mimosaConfig
     _makeShims b, mimosaConfig, browserifyConfig.bundles
 
     for entry in bundleConfig.entries
       b.add path.join root, entry
 
-    bundleCallback = _bundleCallback bundleConfig, bundlePath, nextIfDone
+    bundleCallback = _bundleCallback bundleConfig, bundlePath, whenDone
     bundle         = b.bundle browerifyOptions, bundleCallback
 
 
@@ -74,12 +80,39 @@ _makeShims = (browserifyInstance, mimosaConfig, bundleConfig) ->
   shim b, shims
 
 
-_nextIfDone = (numBundles, next) ->
+_whenDone = (mimosaConfig, bundledFiles, next) ->
+  numBundles = mimosaConfig.browserify.bundles.length
   bundlesComplete = 0
   ->
     bundlesComplete += 1
-    next() if bundlesComplete is numBundles
+    if bundlesComplete is numBundles
+      if mimosaConfig.isBuild
+        _cleanUpBuild mimosaConfig, bundledFiles
+      next()
 
+
+_cleanUpBuild = (mimosaConfig, bundledFiles) ->
+  bundledFiles = _.uniq bundledFiles
+  for f in bundledFiles
+    if fs.existsSync f
+      fs.unlinkSync f
+
+  # now clean up empty directories
+  compDir = mimosaConfig.watch.compiledDir
+  directories = wrench.readdirSyncRecursive(compDir).filter (f) -> fs.statSync(path.join(compDir, f)).isDirectory()
+  _.sortBy(directories, 'length').reverse().map (dir) ->
+    path.join(compDir, dir)
+  .forEach (dirPath) ->
+    if fs.existsSync dirPath
+      try
+        fs.rmdirSync dirPath
+        # logger.success "Deleted empty directory [[ #{dirPath} ]]"
+      catch err
+        if err.code is 'ENOTEMPTY'
+          #logger.info "Unable to delete directory [[ #{dirPath} ]] because directory not empty"
+        else
+          #logger.error "Unable to delete directory, [[ #{dirPath} ]]"
+          #logger.error err
 
 _bundleCallback = (bundleConfig, bundlePath, complete) ->
   (err, src) ->
