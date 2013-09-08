@@ -8,6 +8,7 @@ exports.defaults = ->
     debug: true
     shims: {}
     aliases: {}
+    noParse: []
 
 exports.placeholder = ->
   """
@@ -16,11 +17,16 @@ exports.placeholder = ->
     #     entries: ['javascripts/main.js']
     #     outputFile: 'bundle.js' ]
     #   debug: true                         # true for sourcemaps
-    #   shims: []                           # add any number of shims you neeed
+    #   shims: {}                           # add any number of shims you neeed
     #                                       # see https://github.com/thlorenz/browserify-shim for config details
     #   aliases:
     #     dust: 'javascripts/vendor/dust'   # aliases allow you to require('alias') without having
     #                                       # to worry about relative paths. define as many as you need!
+    #
+    #   noParse:                            # an array of files you want browserify to skip parsing for.
+    #     ['javascripts/vendor/jquery']     # useful for the big libs (jquery, ember, handlebars, dust, etc) that don't
+    #                                       # need node environment vars (__process, module, etc). This can save
+    #                                       # a significant amount of time when bundling.
   """
 
 exports.validate = (config, validators) ->
@@ -30,6 +36,8 @@ exports.validate = (config, validators) ->
     validators.ifExistsIsBoolean(errors, "browserify.debug", config.browserify.debug)
     validators.ifExistsIsObject(errors, "browserify.shims", config.browserify.shims)
     validators.ifExistsIsObject(errors, "browserify.aliases", config.browserify.aliases)
+    validators.ifExistsIsArray(errors, "browserify.noParse", config.browserify.noParse)
+
     if validators.isArray(errors, "browserify.bundles", config.browserify.bundles)
       for bund in config.browserify.bundles
         if validators.ifExistsIsObject(errors, "browserify.bundles entries", bund)
