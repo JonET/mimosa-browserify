@@ -6,7 +6,7 @@ exports.defaults = ->
       entries: ['javascripts/main.js']
       outputFile: 'bundle.js' ]
     debug: true
-    shims: []
+    shims: {}
     aliases: {}
 
 exports.placeholder = ->
@@ -28,7 +28,7 @@ exports.validate = (config, validators) ->
 
   if validators.ifExistsIsObject(errors, "browserify config", config.browserify)
     validators.ifExistsIsBoolean(errors, "browserify.debug", config.browserify.debug)
-    validators.ifExistsIsArray(errors, "browserify.shims", config.browserify.shims)
+    validators.ifExistsIsObject(errors, "browserify.shims", config.browserify.shims)
     validators.ifExistsIsObject(errors, "browserify.aliases", config.browserify.aliases)
     if validators.isArray(errors, "browserify.bundles", config.browserify.bundles)
       for bund in config.browserify.bundles

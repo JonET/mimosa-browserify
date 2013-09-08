@@ -6,6 +6,7 @@ fs          = require 'fs'
 logger      = require 'logmimosa'
 path        = require 'path'
 shim        = require 'browserify-shim'
+through     = require 'through'
 config      = require './config'
 
 registration = (mimosaConfig, register) ->
@@ -41,10 +42,17 @@ _browserify = (mimosaConfig, options, next) ->
 
     browerifyOptions =
       debug: bundleConfig.debug ? browserifyConfig.debug ? true
+      #detectGlobals: true
+      #insertGlobals: true
+      #insertGlobals: bundleConfig.insertGlobals ? browserifyConfig.insertGlobals ? true
 
-    b = browserify()
+    ctorOptions =
+      noParse: _.map browserifyConfig.noParse, (f) -> path.join root, f
+
+    b = browserify ctorOptions
     _makeAliases b, mimosaConfig
     _makeShims b, mimosaConfig, browserifyConfig.bundles
+    _fixShims b, mimosaConfig
 
     for entry in bundleConfig.entries
       b.add path.join root, entry
@@ -73,6 +81,42 @@ _makeShims = (browserifyInstance, mimosaConfig, bundleConfig) ->
 
   shim b, shims
 
+_fixShims = (browserifyInstance, mimosaConfig) ->
+  # So it turns out that if you use a shim with the noParse option
+  # things break as the shims require 'global' to be defined
+  # and not parsing the file results in it being always undefined.
+  # This just patches 'global' into the shim so that we don't
+  # need to have browserify parse large dependencies.
+  b = browserifyInstance
+  b.transform (file) ->
+    return through() unless _isShimmedAndNotParsed(file, mimosaConfig)
+    data = 'var global=self;'
+    write = (buffer) -> data += buffer
+    end = ->
+      @queue data
+      @queue null
+    through write, end
+
+_isShimmedAndNotParsed = (file, mimosaConfig) ->
+  file = _normalizePath file
+
+  browserifyConfig = mimosaConfig.browserify
+  shimmedPaths = []
+  _.forIn browserifyConfig.shims, (v, k) ->
+    shimmedPaths.push _normalizePath(v.path)
+
+  noParsePaths = _.map browserifyConfig.noParse, (f) ->
+    _normalizePath(path.join(mimosaConfig.watch.compiledDir, f))
+
+  shimmedAndNotParsed = _.contains(shimmedPaths, file) and _.contains(noParsePaths, file)
+  logger.debug "[[ #{file} ]] _isShimmedAndNotParsed :: #{shimmedAndNotParsed}"
+  shimmedAndNotParsed
+
+_normalizePath = (file) ->
+  if path.extname(file) is '.js'
+    file = file.slice 0, -3
+
+  file
 
 _nextIfDone = (numBundles, next) ->
   bundlesComplete = 0
