@@ -1,7 +1,16 @@
 # mimosa-browserify
 [Mimosa](https://github.com/dbashford/mimosa) module to support CommonJS via [Browserify](https://github.com/substack/node-browserify). `require()` your web modules Node.js style!
+
+## quickstart
+Mimosa skeletons are available! You now only need one command to create a new browserify app.
+
+`mimosa skel:new browserify-basic myApp` to create a new browserify Mimosa app.
+
+`mimosa skel:new ember-commonjs myApp` to create a new browserify Mimosa app with [Ember.js](http://emberjs.com/).
+
 ## usage
 Replace `require` with `browserify` in your `mimosa-config.coffee`. Mimosa will automatically install mimosa-browserify from NPM if you don't already have it.
+
 ####Updating/Switching Versions
 Use the `mimosa` cli to manage versions. `mimosa mod:list` will show you what you have installed.
 
@@ -38,7 +47,7 @@ Aliases allow you to name your modules. This frees you from having to use relati
 Use noParse to let browserify know not to parse large vendor libraries with no node.js dependencies.  This can help shave a few seconds off of your build time.
 ####templates
 Mimosa as of v1.0.0-rc.4 can output CommonJS wrapped templates compatible with mimosa-browserify. Be sure to set `template.wrapType` to `common` and set your `commonLibPath` if you want to use compiled templates. (you probably do)
-## quickstart
-There is an example project available [here](https://github.com/JonET/mimosa-browserify-example) to help you get started.
+## skeletons
+[browserify-basic](https://github.com/JonET/mimosa-browserify-example) is the default Mimosa project modified for browserify.
 
-Want to roll with mimosa-browserify and [Ember.js](http://emberjs.com/)? It's easy! [Check it out](https://github.com/JonET/mimosa-ember-commonjs).
+[ember-commonjs](https://github.com/JonET/mimosa-ember-commonjs) is a simple Mimosa project with Ember.js support.
