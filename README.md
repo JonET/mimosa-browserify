@@ -4,9 +4,10 @@
 ## quickstart
 Mimosa skeletons are available! You now only need one command to create a new browserify app.
 
-`mimosa skel:new browserify-basic myApp` to create a new browserify Mimosa app.
+* `mimosa skel:new browserify-basic myApp` to create a new browserify Mimosa app.
+* `mimosa skel:new ember-commonjs myApp` to create a new browserify Mimosa app with [Ember.js](http://emberjs.com/).
 
-`mimosa skel:new ember-commonjs myApp` to create a new browserify Mimosa app with [Ember.js](http://emberjs.com/).
+Remember to `npm install` then start developing with `mimosa watch -s`.
 
 ## usage
 Replace `require` with `browserify` in your `mimosa-config.coffee`. Mimosa will automatically install mimosa-browserify from NPM if you don't already have it.
