@@ -1,10 +1,12 @@
 exports.config =
-  modules: ["lint"]
+  modules: ["jshint", "coffeescript"]
+  coffeescript:
+    options:
+      sourceMap: false
   watch:
     sourceDir: "src"
     compiledDir: "lib"
     javascriptDir: null
-  lint:
+  jshint:
     rules:
-      javascript:
-        node: true
+      node: true
