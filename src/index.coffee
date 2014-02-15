@@ -3,14 +3,17 @@
 _           = require 'lodash'
 browserify  = require 'browserify'
 fs          = require 'fs'
-logger      = require 'logmimosa'
 path        = require 'path'
 shim        = require 'browserify-shim'
 through     = require 'through'
 wrench      = require 'wrench'
 config      = require './config'
 
+logger      = null
+
 registration = (mimosaConfig, register) ->
+  logger = mimosaConfig.log
+
   e = mimosaConfig.extensions
   register ['postClean'], 'init', _clean
   register ['add','update','remove'], 'afterWrite', _browserify, [e.javascript..., e.template...]
