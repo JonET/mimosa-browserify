@@ -16,7 +16,7 @@ exports.placeholder = ->
     #   bundles: [                          # add one or more bundles with one or more entry points
     #     entries: ['javascripts/main.js']
     #     outputFile: 'bundle.js' ]
-    #   debug: true                         # true for sourcemaps
+    #   debug: true                         # true for sourcemaps. note: sourcemaps are always disabled for builds
     #   shims: {}                           # add any number of shims you neeed
     #                                       # see https://github.com/thlorenz/browserify-shim for config details
     #   aliases:

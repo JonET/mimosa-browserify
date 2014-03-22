@@ -45,9 +45,11 @@ _browserify = (mimosaConfig, options, next) ->
     outputFile = bundleConfig.outputFile
     bundlePath = path.join mimosaConfig.watch.compiledJavascriptDir, outputFile
 
-    browerifyOptions =
-      debug: bundleConfig.debug ? browserifyConfig.debug ? true
+    browerifyOptions = {}
 
+    unless mimosaConfig.isBuild
+      browerifyOptions.debug = bundleConfig.debug ? browserifyConfig.debug ? true
+    
     ctorOptions =
       noParse: _.map browserifyConfig.noParse, (f) -> path.join root, f
 
