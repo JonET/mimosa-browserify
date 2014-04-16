@@ -137,7 +137,7 @@ _whenDone = (mimosaConfig, bundledFiles, next) ->
 
 _cleanUpBuild = (mimosaConfig, bundledFiles) ->
   bundledFiles = _.uniq bundledFiles
-  filesToClean = bundledFiles.filter (f) -> !f.match /\/node_modules\//
+  filesToClean = bundledFiles.filter (f) -> !f.match /[\\\/]node_modules[\\\/]/
   filesToClean.forEach (f) ->
     if fs.existsSync f
       fs.unlinkSync f
