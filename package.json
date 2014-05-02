@@ -1,6 +1,6 @@
 {
-  "name": "mimosa-browserify",
-  "version": "0.2.0",
+  "name": "mimosa-browserify-averbin",
+  "version": "0.2.1",
   "homepage": "https://github.com/JonET",
   "author": "Jon Taylor",
   "description": "CommonJS support for Mimosa via Browserify",

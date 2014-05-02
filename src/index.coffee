@@ -61,7 +61,12 @@ _browserify = (mimosaConfig, options, next) ->
     _fixShims b, mimosaConfig
 
     for entry in bundleConfig.entries
-      b.add path.join root, entry
+      b.add path.join root, entry      
+
+    if bundleConfig.external?
+      for external in bundleConfig.external
+        entry = path.join root, external
+        b.external entry
 
     bundleCallback = _bundleCallback bundleConfig, bundlePath, whenDone
     bundle         = b.bundle browerifyOptions, bundleCallback
