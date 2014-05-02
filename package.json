@@ -1,6 +1,6 @@
 {
   "name": "mimosa-browserify",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/JonET",
   "author": "Jon Taylor",
   "description": "CommonJS support for Mimosa via Browserify",
@@ -21,7 +21,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "browserify": "3.20.0",
+    "browserify": "3.44.2",
     "browserify-shim": "2.0.10",
     "lodash": "2.4.1",
     "through": "2.3.4",
