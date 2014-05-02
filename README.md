@@ -48,6 +48,22 @@ Aliases allow you to name your modules. This frees you from having to use relati
 Use noParse to let browserify know not to parse large vendor libraries with no node.js dependencies.  This can help shave a few seconds off of your build time.
 ####templates
 Mimosa as of v1.0.0-rc.4 can output CommonJS wrapped templates compatible with mimosa-browserify. Be sure to set `template.wrapType` to `common` and set your `commonLibPath` if you want to use compiled templates. (you probably do)
+####external bundles
+Browserify external bundles are now supported. Thanks [Kikimora](https://github.com/Kikimora)!
+```coffee
+libs = ["/vendor/js/jquery/jquery", "/vendor/js/bootstrap/bootstrap", ....]
+browserify:
+  bundles:
+    [{
+      entries: libs
+      outputFile: 'lib-bundle.js'
+    },{
+      entries: ['js/app.js']
+      outputFile: 'app-bundle.js'
+      external: libs
+    }]
+  ```
+
 ## skeletons
 [browserify-basic](https://github.com/JonET/mimosa-browserify-example) is the default Mimosa project modified for browserify.
 
